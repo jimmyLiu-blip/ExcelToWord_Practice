@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3C6A7F97-75BF-4592-B1C7-3303DA7242EA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RFTestRecordManagementSystem_Service</RootNamespace>
-    <AssemblyName>RFTestRecordManagementSystem_Service</AssemblyName>
+    <ProjectGuid>{25049C44-A097-40C3-B583-87FF439D6C99}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ExcelToWord_Practice</RootNamespace>
+    <AssemblyName>ExcelToWord_Practice</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,9 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IRFTestRecordService.cs" />
-    <Compile Include="RFTestRecordService.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExcelToWord.Service\ExcelToWord.Service.csproj">
+      <Project>{9ece0b7c-c024-4d2f-9099-df70110517d6}</Project>
+      <Name>ExcelToWord.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExcelToWord_Configurement\ExcelToWord.Configuration.csproj">
+      <Project>{d7f8761c-f638-4ed4-b43f-c4a1aea8c814}</Project>
+      <Name>ExcelToWord.Configuration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelService.cs" />
+    <Compile Include="ExportCoordinator.cs" />
     <Compile Include="IExcelService.cs" />
     <Compile Include="IWordService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +85,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExcelToWord_Configurement\ExcelToWord.Configuration.csproj">
+      <Project>{d7f8761c-f638-4ed4-b43f-c4a1aea8c814}</Project>
+      <Name>ExcelToWord.Configuration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

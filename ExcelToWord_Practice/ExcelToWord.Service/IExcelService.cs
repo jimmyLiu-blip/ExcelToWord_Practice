@@ -3,10 +3,10 @@
 namespace ExcelToWord.Service
 {
     public interface IExcelService
-    {
+    { 
         Excel.Workbook Workbook { get; }
 
-        Excel.Range GetNameRange(Excel.Worksheet ws, string rangeName);
+        Excel.Range GetRangeName(Excel.Worksheet ws, string rangeName);
 
         void Close();
     }
