@@ -27,7 +27,7 @@ namespace ExcelToWord.Service
 
             Excel.Workbook workbook = _excelService.Workbook;
 
-            for(int i = _setting.StartSheetIndex; i <= workbook.Sheets.Count; i++) 
+            for (int i = _setting.StartSheetIndex; i <= workbook.Sheets.Count; i++) 
             {
                 Excel.Worksheet ws = (Excel.Worksheet)workbook.Sheets[i]; // 這行很重要
 
@@ -45,6 +45,7 @@ namespace ExcelToWord.Service
 
                 foreach (string rangeName in _setting.TargetNames)
                 {
+
                     Excel.Range range = _excelService.GetRangeName(ws, rangeName);
 
                     if (range == null)
@@ -61,20 +62,50 @@ namespace ExcelToWord.Service
                         continue;
                     }
 
-                    string itemName = rangeName.Contains("_")
-                        ? rangeName.Split('_')[0] 
-                        : rangeName;
+                    // 先嘗試用「完整名稱」映射
+                    string itemName;
+                    if (_setting.PrefixToWordName.TryGetValue(rangeName, out var mappedFull))
+                    {
+                        itemName = mappedFull;
+                    }
+                    else
+                    {
+                        // 判斷是否為「尾段是數字」的樣式：例如 ACL_1、n77_10
+                        string baseKey = rangeName;
+                        int us = rangeName.LastIndexOf('_');
+                        if (us > 0 && us < rangeName.Length - 1)
+                        {
+                            // 只有在最後一段是數字時，才把底線後面去掉當前綴
+                            if (int.TryParse(rangeName.Substring(us + 1), out _))
+                            {
+                                baseKey = rangeName.Substring(0, us); // ACL_1 -> ACL, n77_10 -> n77
+                            }
+                        }
 
-                    string wordPath = Path.Combine( _setting.OutputFolder, $"{itemName}.docx");
+                        // 用前綴找對照表，找不到就用 baseKey 當檔名
+                        itemName = _setting.PrefixToWordName.TryGetValue(baseKey, out var mappedPrefix)
+                            ? mappedPrefix
+                            : baseKey;
+                    }
 
-                    var doc = _wordService.OpenOrCreate(wordPath);
+                    string wordPath = Path.Combine(_setting.OutputFolder, $"{itemName}.docx");
 
-                    _wordService.InsertRangePicture(doc, sheetName, range, _setting.ImageWidthCm);
+                    try
+                    {
+                        var doc = _wordService.OpenOrCreate(wordPath);
+                        _wordService.InsertRangePicture(doc, sheetName, range, _setting.ImageWidthCm);
+                        _wordService.SaveAndClose(doc, wordPath);
+                        Console.WriteLine($"匯出成功：{rangeName} → {wordPath}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"❌ 匯出失敗：{rangeName}（在 {ws.Name}） - {ex.Message}");
+                        Console.ResetColor();
+                    }
 
-                    _wordService.SaveAndClose(doc, wordPath);
+                    Thread.Sleep(_setting.DelayMs);
 
-                    Console.WriteLine($"匯出 {rangeName} => {wordPath}");
-                    
                     Thread.Sleep(_setting.DelayMs);
                 }
             }
