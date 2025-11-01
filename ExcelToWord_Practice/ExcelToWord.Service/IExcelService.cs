@@ -4,7 +4,7 @@ namespace ExcelToWord.Service
 {
     public interface IExcelService
     { 
-        Excel.Workbook Workbook { get; }
+        Excel.Workbook Workbook { get;}
 
         Excel.Range GetRangeName(Excel.Worksheet ws, string rangeName);
 

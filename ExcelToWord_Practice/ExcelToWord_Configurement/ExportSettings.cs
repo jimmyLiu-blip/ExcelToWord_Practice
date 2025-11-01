@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ExcelToWord.Configuration
@@ -10,20 +9,9 @@ namespace ExcelToWord.Configuration
 
         public string OutputFolder { get; set; } = @"C:\Reports\WordOutputs_ByItem";
 
-        public string[] TargetNames { get; set; } = { 
-            "n77_10","n77_15","Test_Condition","Voltage_Variation","Result",
-            "ACL_1", "ACL_2","ACL_3","ACL_4",
-            "ACLN_1","ACLN_2","ACLN_3","ACLN_4",
-            "FTol_1","FTol_2","FTol_3","FTol_4",
-            "Inter_1","Inter_2","Inter_3","Inter_4",
-            "OBE_1","OBE_2","OBE_3","OBE_4",
-            "OCB_1","OCB_2","OCB_3","OCB_4",
-            "Power_1","Power_2","Power_3","Power_4",
-            "RX_1","RX_2","RX_3","RX_4",
-            "Spurious_1","Spurious_2","Spurious_3","Spurious_4" 
-        };
+        public string[] TargetNames { get; set; } = { "ACL_1", "ACLN_1" };
 
-        public int StartSheetIndex { get; set; } = 4;
+        public int StartIndexSheet { get; set; } = 4;
 
         public float ImageWidthCm { get; set; } = 18;
 
@@ -31,7 +19,8 @@ namespace ExcelToWord.Configuration
 
         public bool InsertTitleBeforeImage { get; set; } = false;
 
-        public Dictionary<string, string> PrefixToWordName { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        // 如果要自定義Word名稱，建議使用Dictionary的key、value兩兩一組
+        public Dictionary<string,string> PrefixToWordName { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "ACL", "ACP" },
             { "ACLN", "Leakage_Power_No_Carrier" },
@@ -50,4 +39,5 @@ namespace ExcelToWord.Configuration
         };
     }
 }
+
 

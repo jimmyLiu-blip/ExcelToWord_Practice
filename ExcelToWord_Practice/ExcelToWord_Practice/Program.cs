@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using ExcelToWord.Configuration;
 using ExcelToWord.Service;
 
@@ -6,7 +7,7 @@ namespace ExcelToWord_Practice
 {
     public class Program
     {
-        [STAThread] //遺漏沒寫到
+        [STAThread] 
         static void Main()
         {
             try
@@ -19,8 +20,8 @@ namespace ExcelToWord_Practice
 
                 Console.WriteLine($"Excel 路徑為: {settings.ExcelPath} ");
                 Console.WriteLine($"Word 輸出資料夾路徑為: {settings.OutputFolder} ");
-                Console.WriteLine($"輸出範圍: {string.Join(",",settings.TargetNames)} ");  // 要使用Join讓裡面的字串隔開
-                Console.WriteLine($"從第 {settings.StartSheetIndex} 張 sheet 開始匯出\n");
+                Console.WriteLine($"輸出範圍為：{string.Join(",", settings.TargetNames)}");
+                Console.WriteLine($"從第 {settings.StartIndexSheet} 張 sheet 開始匯出\n");
 
                 IExcelService excelService = new ExcelService(settings.ExcelPath);
                 IWordService wordService = new WordService(settings);
@@ -29,9 +30,9 @@ namespace ExcelToWord_Practice
 
                 coordinator.Run();
 
-                Console.ForegroundColor = ConsoleColor.Green; // 忘記寫
-                Console.WriteLine("\n所有作業已完成"); // 忘記寫
-                Console.ResetColor();   // 忘記寫
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\n所有作業已完成"); 
+                Console.ResetColor();  
             }
             catch (Exception ex)
             {
