@@ -1,31 +1,41 @@
-name: Build .NET Framework 4.8 Project
+name: Build ExcelToWord_Practice (.NET Framework 4.8 Project)
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:     # 👈 新增這行可手動執行
+  workflow_dispatch:    # ✅ 允許手動觸發
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-latest   # 使用 Windows Runner（內含 .NET Framework 4.8）
 
     steps:
+      # 1️⃣ 取得程式碼
       - name: 取得程式碼
         uses: actions/checkout@v4
 
+      # 2️⃣ 顯示目前目錄內容（方便除錯）
+      - name: 顯示目錄結構
+        run: dir
+
+      # 3️⃣ 設定 MSBuild（用於建置 .NET Framework 專案）
       - name: 設定 MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      # 4️⃣ 還原 NuGet 套件
       - name: 還原 NuGet 套件
         run: nuget restore ExcelToWord_Practice.sln
 
+      # 5️⃣ 建置 Solution（正式編譯）
       - name: 建置 Solution
-        run: msbuild ExcelToWord.sln /p:Configuration=Release
+        run: msbuild ExcelToWord_Practice.sln /p:Configuration=Release
 
+      # 6️⃣ 上傳編譯成果（可選）
       - name: 上傳編譯成果
         uses: actions/upload-artifact@v4
         with:
-          name: ExcelToWord-Build
-          path: '**/bin/Release/'
+          name: ExcelToWord_Build_Output
+          path: |
+            **/bin/Release/
