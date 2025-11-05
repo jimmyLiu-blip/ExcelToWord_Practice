@@ -1,5 +1,4 @@
 name: Build ExcelToWord_Practice (.NET Framework 4.8 Project)
-
 on:
   push:
     branches: [ "main" ]
@@ -10,51 +9,30 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
       - name: 取得程式碼
         uses: actions/checkout@v4
-
-      # 👇 顯示實際資料夾層級，確認 .sln 的所在
-      - name: 顯示完整路徑與檔案列表
+      
+      - name: 顯示檔案結構(除錯用)
         run: |
-          echo "=== 目前目錄 ==="
-          cd
-          echo "=== 上一層 ==="
-          cd ..
-          dir /b
-          echo "=== 再上一層 ==="
-          cd ..
-          dir /b
-          echo "=== 全部檔案（遞迴） ==="
-          cd ${{ github.workspace }}
-          dir /s /b | findstr .sln
-
+          echo "=== 根目錄檔案 ==="
+          dir
+          echo "=== 搜尋所有 .sln 檔案 ==="
+          dir /s /b *.sln
+      
       - name: 設定 MSBuild
         uses: microsoft/setup-msbuild@v2
-
-      # 👇 用 PowerShell 自動尋找 .sln 檔案再還原
-      - name: 自動尋找並還原 NuGet 套件
-        shell: pwsh
-        run: |
-          $sln = Get-ChildItem -Path $env:GITHUB_WORKSPACE -Recurse -Filter "*.sln" | Select-Object -First 1
-          if ($null -eq $sln) {
-            Write-Error "❌ 找不到 .sln 檔案"
-            exit 1
-          } else {
-            Write-Host "✅ 找到解決方案檔案：" $sln.FullName
-            nuget restore $sln.FullName
-          }
-
+      
+      # 方法1: 直接指定路徑還原 NuGet
+      - name: 還原 NuGet 套件
+        run: nuget restore ExcelToWord_Practice/ExcelToWord_Practice.sln
+      
+      # 方法1: 直接指定路徑建置
       - name: 建置 Solution
-        shell: pwsh
-        run: |
-          $sln = Get-ChildItem -Path $env:GITHUB_WORKSPACE -Recurse -Filter "*.sln" | Select-Object -First 1
-          Write-Host "🔧 開始建置：" $sln.FullName
-          msbuild $sln.FullName /p:Configuration=Release
-
+        run: msbuild ExcelToWord_Practice/ExcelToWord_Practice.sln /p:Configuration=Release /p:Platform="Any CPU"
+      
       - name: 上傳編譯成果
         uses: actions/upload-artifact@v4
         with:
           name: ExcelToWord_Build_Output
-          path: '**/bin/Release/'
+          path: 'ExcelToWord_Practice/**/bin/Release/'
