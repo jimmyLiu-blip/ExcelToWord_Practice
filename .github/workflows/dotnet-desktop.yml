@@ -19,7 +19,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: 還原 NuGet 套件
-        run: nuget restore ExcelToWord.sln
+        run: nuget restore ExcelToWord_Practice.sln
 
       - name: 建置 Solution
         run: msbuild ExcelToWord.sln /p:Configuration=Release
